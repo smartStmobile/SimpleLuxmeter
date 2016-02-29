@@ -7,11 +7,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-//import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-//import android.telephony.TelephonyManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,11 +21,6 @@ import ante.com.simpleluxmeter.R;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
 
-    private SensorManager sensorManager;
-    private Sensor sensorLight;
-    private TextView textViewLight, textViewExplanation, textmin, textMax;
-    private ImageView imageView;
-    private String luminance = "";
     private static final String MOONLESS = "Moonless,overcast night sky ";
     private static final String MOONLESS_WITH_AIRGLOW = "Moonless clear night sky with airglow ";
     private static final String FULL_MOON_CLEAR = "Fool moon on a clear night";
@@ -40,11 +33,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final String OVERCAST_DAY = "Overcast day;Typical TV studio lightning ";
     private static final String FULL_DAYLIGHT = "Full daylight (not direct sun)";
     private static final String DIRECT_SUNLIGHT = "Direct sunlight";
-    private Handler mHandler = new Handler();
     private static ProgressBar progressBar;
     private static float min = 20;
     private static float max = 0;
-
+    private SensorManager sensorManager;
+    private Sensor sensorLight;
+    private TextView textViewLight, textViewExplanation, textmin, textMax;
+    private ImageView imageView;
+    private String luminance = "";
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-      // Toast.makeText(getApplicationContext(),String.valueOf(MANUFACTURER.equalsIgnoreCase("LGE")), Toast.LENGTH_LONG).show();
+        // Toast.makeText(getApplicationContext(),String.valueOf(MANUFACTURER.equalsIgnoreCase("LGE")), Toast.LENGTH_LONG).show();
 
 
         try {
@@ -106,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onPause() {
-        // Pause the AdView.
-        //mAdView.pause();
+
         super.onPause();
         sensorManager.unregisterListener(this, sensorLight);
 
@@ -115,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onDestroy() {
-        // Destroy the AdView.
-        // mAdView.destroy();
+
         super.onDestroy();
         sensorManager.unregisterListener(this, sensorLight);
 
@@ -136,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     luminance = MOONLESS;
                     progressBar.setProgress(0);
 
-                    // imageView.setImageResource(R.drawable.stars);
-                } else if (event.values[0] >= 0.002 && event.values[0] < 0.27 ) {
+
+                } else if (event.values[0] >= 0.002 && event.values[0] < 0.27) {
                     luminance = MOONLESS_WITH_AIRGLOW;
                     progressBar.setProgress(3);
 
@@ -188,14 +183,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         }
-        //tempRez=event.values[0];
+
         if (event.values[0] < min) {
             min = event.values[0];
         }
         if (event.values[0] > max) {
             max = event.values[0];
         }
-        // else {max=max;}
+
 
         textViewLight.setText(String.valueOf(event.values[0]));
         textViewExplanation.setText(luminance);
